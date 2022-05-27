@@ -23,7 +23,7 @@ app.get('/api/hello', function (req, res) {
     res.json({ greeting: 'hello API' });
 });
 
-app.get('/api/timestamp/:date?', (req, res) => {
+app.get('/api/:date?', (req, res) => {
     const date = req.params.date;
     let dateString, unix, utc;
     if (!date) {
