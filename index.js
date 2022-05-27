@@ -50,7 +50,7 @@ app.get('/api/:date?', (req, res) => {
         unix = dateString;
         utc = new Date(unix).toUTCString();
         res.json({ unix, utc });
-    } else {
+    } else if (!(date instanceof Date) || isNaN(date.getTime())) {
         res.json({ error: 'Invalid Date' });
     }
 });
