@@ -24,35 +24,18 @@ app.get('/api/hello', function (req, res) {
 });
 
 app.get('/api/:date?', (req, res) => {
-    const date = req.params.date;
-    let dateString, unix, utc;
-    if (!date) {
-        newDate = new Date();
-        utc = newDate.toUTCString();
-        unix = newDate.getTime();
-        res.json({ unix, utc });
-    } else if (date.includes('-')) {
-        dateString = date.split('-');
-        newDate = new Date(
-            parseInt(dateString[0]),
-            parseInt(dateString[1]) - 1,
-            parseInt(dateString[2])
-        );
-        utc = newDate.toUTCString();
-        unix = newDate.getTime();
-        res.json({ unix, utc });
-    } else if (
-        date.includes('-') === false &&
-        !isNaN(parseFloat(date)) &&
-        isFinite(date) === true
-    ) {
-        dateString = parseInt(date);
-        unix = dateString;
-        utc = new Date(unix).toUTCString();
-        res.json({ unix, utc });
-    } else if (!(date instanceof Date) || isNaN(date.getTime())) {
-        res.json({ error: 'Invalid Date' });
+    let date = new Date();
+
+    if (req.params.date) {
+        let unixDate = +req.params.date;
+
+        date = isNaN(unixDate) ? new Date(req.params.date) : new Date(unixDate);
+
+        if (!(date instanceof Date) || isNaN(date.getTime()))
+            return res, json({ error: 'Invalid Date' });
     }
+
+    return res.json({ unix: date.getTime(), utc: date.toUTCString() });
 });
 
 // listen for requests :)
